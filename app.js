@@ -1,9 +1,22 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
-const restaurantsList = require('./restaurant.json');
+const mongoose = require('mongoose');
+const Restaurant = require('./models/restaurant'); // models
 
 const app = express();
 const port = 3000;
+
+// db connection
+mongoose.connect(process.env.MONGODB_RESTAURANT_URI);
+
+// connect to mongodb and do something
+const db = mongoose.connection;
+db.on('error', () => {
+    console.log('error connecting');
+});
+db.once('open', () => {
+    console.log('mongodb connected!');
+});
 
 // template engine
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
@@ -14,8 +27,14 @@ app.use(express.static('public'));
 
 // routes
 app.get('/', (req, res) => {
-    const restaurants = restaurantsList.results;
-    res.render('index', { restaurants });
+    Restaurant.find()
+        .lean()
+        .then((restaurants) => {
+            res.render('index', { restaurants });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 });
 
 app.get('/restaurants/:id', (req, res) => {
