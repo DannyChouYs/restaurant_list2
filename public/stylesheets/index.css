@@ -84,6 +84,10 @@ header {
     border-radius: 10px;
 }
 
+.create-form {
+    margin-top: 20px;
+}
+
 @media screen and (max-width: 992px) {
     .card img {
         height: 115px;

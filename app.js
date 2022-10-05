@@ -2,6 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const Restaurant = require('./models/restaurant'); // models
+const bodyParser = require('body-parser');
 
 const app = express();
 const port = 3000;
@@ -22,6 +23,8 @@ db.once('open', () => {
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // static files
 app.use(express.static('public'));
 
@@ -35,6 +38,19 @@ app.get('/', (req, res) => {
         .catch((error) => {
             console.log(error);
         });
+});
+
+// 渲染新增表單畫面
+app.get('/restaurants/new', (req, res) => {
+    res.render('new');
+});
+
+// 新增資料的處理路由
+app.post('/restaurants', (req, res) => {
+    const restaurant = req.body;
+    Restaurant.create(restaurant)
+        .then(() => res.redirect('/'))
+        .catch((error) => console.log(error));
 });
 
 app.get('/restaurants/:id', (req, res) => {
