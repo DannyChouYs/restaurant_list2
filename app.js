@@ -62,6 +62,42 @@ app.get('/restaurants/:id', (req, res) => {
         .catch((error) => console.log(error));
 });
 
+// 顯示特定餐廳的可修改資料
+app.get('/restaurants/:id/edit', (req, res) => {
+    const id = req.params.id;
+    Restaurant.findById(id)
+        .lean()
+        .then((restaurant) => res.render('edit', { restaurant }))
+        .catch((error) => {
+            console.log(error);
+        });
+});
+
+// 處理特定餐廳可修改資料的路由
+app.post('/restaurants/:id/edit', (req, res) => {
+    const id = req.params.id;
+    const restaurantEditItem = req.body;
+    Restaurant.findById(id)
+        .then((restaurant) => {
+            Object.keys(restaurantEditItem).forEach((key) => {
+                if (key === 'rating') {
+                    restaurant[key] = parseFloat(restaurantEditItem[key].trim());
+                } else {
+                    restaurant[key] = restaurantEditItem[key].trim();
+                }
+            });
+            return restaurant.save();
+        })
+        // 處理完回到該餐廳的詳細頁面
+        .then(() => res.redirect(`/restaurants/${id}`))
+        .catch((error) => {
+            console.log(error);
+        });
+});
+
+/**
+ * todo 搜尋功能調整
+ */
 app.get('/search', (req, res) => {
     const keyword = req.query.keyword;
     const restaurants = restaurantsList.results.filter((restaurant) => {

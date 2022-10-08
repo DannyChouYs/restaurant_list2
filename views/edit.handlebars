@@ -1,0 +1,42 @@
+<div class='container create-form'>
+    <form action='/restaurants/{{restaurant._id}}/edit' method='POST'>
+        <div class='mb-3'>
+            <label for='name' class='form-label'>Restaurant Name(zh)</label>
+            <input type='text' class='form-control' name='name' id='name' value='{{restaurant.name}}' />
+        </div>
+        <div class='mb-3'>
+            <label for='name_en' class='form-label'>Restaurant Name(en)</label>
+            <input type='text' class='form-control' name='name_en' value='{{restaurant.name_en}}' />
+        </div>
+        <div class='mb-3'>
+            <label for='category' class='form-label'>Category</label>
+            <input type='text' class='form-control' name='category' value='{{restaurant.category}}' />
+        </div>
+        <div class='mb-3'>
+            <label for='image' class='form-label'>Image</label>
+            <input type='text' class='form-control' name='image' value='{{restaurant.image}}' />
+        </div>
+        <div class='mb-3'>
+            <label for='location' class='form-label'>Location</label>
+            <input type='text' class='form-control' name='location' value='{{restaurant.location}}' />
+        </div>
+        <div class='mb-3'>
+            <label for='phone' class='form-label'>Phone</label>
+            <input type='text' class='form-control' name='phone' value='{{restaurant.phone}}' />
+        </div>
+        <div class='mb-3'>
+            <label for='google_map' class='form-label'>Google Map</label>
+            <input type='text' class='form-control' name='google_map' value='{{restaurant.google_map}}' />
+        </div>
+        <div class='mb-3'>
+            <label for='rating' class='form-label'>Rating</label>
+            <input type='text' class='form-control' name='rating' value='{{restaurant.rating}}' />
+        </div>
+        <div class='mb-3'>
+            <label for='description' class='form-label'>Description</label>
+            <input type='text' class='form-control' name='description' value='{{restaurant.description}}' />
+        </div>
+
+        <button type='submit' class='btn btn-primary'>Submit</button>
+    </form>
+</div>
