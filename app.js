@@ -95,6 +95,17 @@ app.post('/restaurants/:id/edit', (req, res) => {
         });
 });
 
+// 處理刪除資料的路由
+app.post('/restaurants/:id/delete', (req, res) => {
+    const id = req.params.id;
+    Restaurant.findById(id)
+        .then((restaurant) => {
+            restaurant.remove();
+        })
+        .then(() => res.redirect('/'))
+        .catch((error) => console.log(error));
+});
+
 /**
  * todo 搜尋功能調整
  */
