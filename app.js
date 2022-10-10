@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const Restaurant = require('./models/restaurant'); // models
 const bodyParser = require('body-parser');
 
+const methodOverride = require('method-override');
+
 const app = express();
 const port = 3000;
 
@@ -27,6 +29,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // static files
 app.use(express.static('public'));
+
+// 使用method-override
+app.use(methodOverride('_method'))
 
 // routes
 app.get('/', (req, res) => {
@@ -62,7 +67,7 @@ app.get('/restaurants/:id', (req, res) => {
         .catch((error) => console.log(error));
 });
 
-// 顯示特定餐廳的可修改資料
+// 顯示修改特定餐廳資料的頁面
 app.get('/restaurants/:id/edit', (req, res) => {
     const id = req.params.id;
     Restaurant.findById(id)
@@ -74,7 +79,7 @@ app.get('/restaurants/:id/edit', (req, res) => {
 });
 
 // 處理特定餐廳可修改資料的路由
-app.post('/restaurants/:id/edit', (req, res) => {
+app.put('/restaurants/:id', (req, res) => {
     const id = req.params.id;
     const restaurantEditItem = req.body;
     Restaurant.findById(id)
@@ -96,7 +101,7 @@ app.post('/restaurants/:id/edit', (req, res) => {
 });
 
 // 處理刪除資料的路由
-app.post('/restaurants/:id/delete', (req, res) => {
+app.delete('/restaurants/:id', (req, res) => {
     const id = req.params.id;
     Restaurant.findById(id)
         .then((restaurant) => {

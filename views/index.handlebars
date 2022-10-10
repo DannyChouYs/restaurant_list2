@@ -53,7 +53,7 @@
                     <div class='d-grid gap-2 d-md-flex justify-content-md-end'>
                         <a href='/restaurants/{{this._id}}/edit'>Edit</a>
                         <a href='/restaurants/{{this._id}}'>Detail</a>
-                        <form action='/restaurants/{{this._id}}/delete' method='POST'>
+                        <form action='/restaurants/{{this._id}}?_method=DELETE' method='POST'>
                             <button type='submit' class='btn btn-outline-danger btn-sm'>Delete</button>
                         </form>
                     </div>
