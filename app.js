@@ -1,10 +1,11 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
-const Restaurant = require('./models/restaurant'); // models
 const bodyParser = require('body-parser');
 
 const methodOverride = require('method-override');
+
+const routes = require('./routes');
 
 const app = express();
 const port = 3000;
@@ -31,85 +32,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // 使用method-override
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method'));
 
-// routes
-app.get('/', (req, res) => {
-    Restaurant.find()
-        .lean()
-        .then((restaurants) => {
-            res.render('index', { restaurants });
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-});
-
-// 渲染新增表單畫面
-app.get('/restaurants/new', (req, res) => {
-    res.render('new');
-});
-
-// 新增資料的處理路由
-app.post('/restaurants', (req, res) => {
-    const restaurant = req.body;
-    Restaurant.create(restaurant)
-        .then(() => res.redirect('/'))
-        .catch((error) => console.log(error));
-});
-
-// 瀏覽特定餐廳的詳細資料
-app.get('/restaurants/:id', (req, res) => {
-    const id = req.params.id;
-    Restaurant.findById(id)
-        .lean()
-        .then((restaurant) => res.render('show', { restaurant }))
-        .catch((error) => console.log(error));
-});
-
-// 顯示修改特定餐廳資料的頁面
-app.get('/restaurants/:id/edit', (req, res) => {
-    const id = req.params.id;
-    Restaurant.findById(id)
-        .lean()
-        .then((restaurant) => res.render('edit', { restaurant }))
-        .catch((error) => {
-            console.log(error);
-        });
-});
-
-// 處理特定餐廳可修改資料的路由
-app.put('/restaurants/:id', (req, res) => {
-    const id = req.params.id;
-    const restaurantEditItem = req.body;
-    Restaurant.findById(id)
-        .then((restaurant) => {
-            Object.keys(restaurantEditItem).forEach((key) => {
-                if (key === 'rating') {
-                    restaurant[key] = parseFloat(restaurantEditItem[key].trim());
-                } else {
-                    restaurant[key] = restaurantEditItem[key].trim();
-                }
-            });
-            return restaurant.save();
-        })
-        // 處理完回到該餐廳的詳細頁面
-        .then(() => res.redirect(`/restaurants/${id}`))
-        .catch((error) => {
-            console.log(error);
-        });
-});
-
-// 處理刪除資料的路由
-app.delete('/restaurants/:id', (req, res) => {
-    const id = req.params.id;
-    Restaurant.findById(id)
-        .then((restaurant) => {
-            restaurant.remove();
-        })
-        .then(() => res.redirect('/'))
-        .catch((error) => console.log(error));
-});
+// 將 request 導入路由器
+app.use(routes);
 
 /**
  * todo 搜尋功能調整
