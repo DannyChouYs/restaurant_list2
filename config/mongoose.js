@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+if (!process.env.MONGODB_RESTAURANT_URI) console.log('check .env file.');
 // db connection
 mongoose.connect(process.env.MONGODB_RESTAURANT_URI);
 
